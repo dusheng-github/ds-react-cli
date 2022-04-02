@@ -1,0 +1,7 @@
+node_modules/
+dist/
+conf/
+tools/
+build/
+*.stories.js
+mobile_end/
