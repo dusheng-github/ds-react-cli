@@ -1,106 +1,69 @@
-{
-    "extends": "./node_modules/eslint-config-airbnb/.eslintrc",
-    // "parser": "babel-eslint-parser",
-    "env": {
-      "browser": 1
+{   
+    "extends": [
+        "eslint:recommended",
+        "airbnb", 
+        "airbnb/hooks",
+    ],
+    "plugins": [
+        "react", // eslint-plugin-react插件
+        "babel", //  eslint-plugin-bable插件
+        "import", //  eslint-plugin-import插件
+        "jsx-a11y", //  eslint-plugin-jsx-a11y插件
+        "react-hooks", //  eslint-plugin-react-hooks插件
+      ],
+      "env": {
+        "browser": true,
+        "node": true
     },
     "globals": {
-      "document": true,
-      "window": true,
-      "fetch": true
+        "Promise": "writable"
     },
-    "plugins": [
-      "react-hooks"
-    ],
-    "settings": {
+      "parser": "@babel/eslint-parser",
+      "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true
+        }
     },
+    // 0 === "off" 1 === "warn" 2 === "error"
     "rules": {
-      "guard-for-in": 0,
-      "max-len": 0,
-      "global-require": 0,
-      "new-cap": 0,
-      "class-methods-use-this": 0,
-      "arrow-parens": 0,
-      "one-var": 0,
-      "prefer-const": 0,
-      "consistent-return": 0,
-      "func-names": 0,
-      "linebreak-style": 0,
-      "object-property-newline": 0,
-      "generator-star-spacing": 0,
-      "prefer-destructuring": 0,
-      "object-curly-newline": 0,
-      "function-paren-newline": 0,
-      "indent": [2, 2, { "SwitchCase": 1 }],
-      "camelcase": 0,
-      "semi": [2, "never"],
-      "eol-last": 0,
-      "one-var-declaration-per-line": 1,
-      "prefer-promise-reject-errors": 1,
-      "import/prefer-default-export": 0,
-      "import/first": 1,
-      "import/no-mutable-exports": 0,
-      "import/newline-after-import": 0,
-      "import/no-unresolved": 0,
-      "import/extensions": 0,
-      "import/no-absolute-path": 0,
-      "import/no-duplicates": 0,
-      "import/no-extraneous-dependencies": 0,
-      "import/no-named-as-default": 0,
-      "import/no-named-as-default-member": 0,
-      "import/no-dynamic-require": 1,
-      "no-plusplus": 0,
-      "no-return-assign": 0,
-      "no-underscore-dangle": 0,
-      "no-unused-expressions": 0,
-      "no-restricted-syntax": 0,
-      "no-restricted-properties": 0,
-      "no-await-in-loop": 0,
-      "no-restricted-globals": 0,
-      "no-multi-assign": 0,
-      "no-nested-ternary": 0,
-      "no-console": 0,
-      "no-script-url": 0,
-      "no-alert": 0,
-      "no-continue": 0,
-      "no-return-await": 0,
-      "no-confusing-arrow": 0,
-      "no-useless-return": 1,
-      "no-multi-spaces": [2, { "ignoreEOLComments": true }],
-      "no-unused-vars": 1,
-      "no-case-declarations": 0,
-      "no-fallthrough": 0,
-      "jsx-a11y/no-static-element-interactions": 0,
-      "jsx-a11y/click-events-have-key-events": 0,
-      "jsx-a11y/anchor-is-valid": 0,
-      "jsx-a11y/no-noninteractive-element-interactions": 0,
-      "jsx-a11y/role-has-required-aria-props": 0,
-      "jsx-a11y/mouse-events-have-key-events": 0,
-      "jsx-a11y/label-has-for": 0,
-      "jsx-a11y/no-redundant-roles": 0,
-      "jsx-a11y/no-autofocus": 0,
-      "jsx-a11y/alt-text": 0,
-      "jsx-a11y/anchor-has-content": 0,
-      "react/sort-comp": 0,
-      "react/no-danger": 0,
-      "react/no-unused-prop-types": 0,
-      "react/no-will-update-set-state": 1,
-      "react/react-in-jsx-scope": 0,
-      "react/jsx-no-bind": 0,
-      "react/jsx-closing-tag-location": 0,
-      "react/require-default-props": 0,
-      "react/no-array-index-key": 0,
-      "react/no-unused-state": 0,
-      "react/no-find-dom-node": 0,
-      "react/jsx-filename-extension": 0,
-      "react/prefer-stateless-function": 0,
-      "react/prop-types": 1,
-      "react/forbid-prop-types": 0,
-      "react/default-props-match-prop-types": 0,
-      "react/jsx-indent-props": [2, 2],
-      "react/jsx-indent": [2, 2],
-      "react-hooks/rules-of-hooks": "error", // 检查 Hook 的规则
-      "react-hooks/exhaustive-deps": "warn" // // 检查 effect 的依赖
+        /************************************** import *********************************/
+        "import/no-unresolved": 0,
+        "import/named": 2,
+        "import/namespace": 2,
+        "import/default": 2,
+        "import/export": 2,
+        "import/prefer-default-export": 1, // 一个导出使用 const bar = 'bar'; export default bar; 而非export const foo = 'foo';这种解构的方式  
+        
+        
+         /************************************** jsx-a11y *********************************/
+        "jsx-a11y/rule-name": 0,
+        "jsx-a11y/anchor-is-valid": "warn", // a标签必须带href
+
+
+        /************************************** react *********************************/
+        "react/jsx-uses-react": "error",
+        "react/jsx-uses-vars": "error",
+        "react/jsx-filename-extension": "off", // 必须jsx文件后缀
+        "react/no-unused-class-component-methods": "warn", // react 方法定义但未使用warn
+
+
+        /************************************** react hooks *********************************/
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn",
+
+
+        /************************************** js *********************************/
+        "semi": [2, "never"], // 禁用分号
+        "indent": ["error", 2], // 间隙2格
+        "quotes": ["error", "single"], // 强制单引号
+        "no-console": "off", // 禁止console
+        "no-comma-dangle": "off", // 末尾逗号
+        "linebreak-style": "off", // 统一换行风格
+        "no-unused-vars": "warn", // 定义变量未使用只warn
+        "max-len": ["warn", { "code": 200 }], // 每行最多200
+        "prefer-promise-reject-errors": "off", // 要求使用 Error 对象作为 Promise 拒绝的原因
+        "no-plusplus": "off", // 禁用一元操作符 ++ 和 --
     }
-  }
-  
+}

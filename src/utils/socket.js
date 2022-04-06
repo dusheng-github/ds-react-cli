@@ -9,33 +9,35 @@ class SocketHelper {
       listeners.forEach(this.addListener)
     }
   }
-    send = (channel, msg) => {
-      this.socket.emit(channel, msg)
-    }
 
-    on = (type, handel) => {
-      if (!this.reducers[type]) {
-        this.reducers[type] = []
-        this.socket.on(type, data => {
-          if (this.reducers[type] && this.reducers[type].length) {
-            this.reducers[type].forEach(item => item(data))
-          }
-        })
-      }
-      const index = this.reducers[type].findIndex(item => item === handel)
-      if (index === -1) {
-        this.reducers[type].push(handel)
-      }
-      return () => this.removeListener(type, handel)
-    }
-    off = (type, handel) => {
-      if (this.reducers[type] && this.reducers[type].length) {
-        const index = this.reducers[type].findIndex(item => item === handel)
-        if (index !== -1) {
-          this.reducers[type].splice(index, 1)
+  send = (channel, msg) => {
+    this.socket.emit(channel, msg)
+  }
+
+  on = (type, handel) => {
+    if (!this.reducers[type]) {
+      this.reducers[type] = []
+      this.socket.on(type, (data) => {
+        if (this.reducers[type] && this.reducers[type].length) {
+          this.reducers[type].forEach((item) => item(data))
         }
+      })
+    }
+    const index = this.reducers[type].findIndex((item) => item === handel)
+    if (index === -1) {
+      this.reducers[type].push(handel)
+    }
+    return () => this.removeListener(type, handel)
+  }
+
+  off = (type, handel) => {
+    if (this.reducers[type] && this.reducers[type].length) {
+      const index = this.reducers[type].findIndex((item) => item === handel)
+      if (index !== -1) {
+        this.reducers[type].splice(index, 1)
       }
     }
+  }
 }
 
 export default function socketConnect() {

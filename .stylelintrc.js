@@ -1,9 +1,9 @@
 
 
-{
-    processors: [],
-    plugins: ['stylelint-order'],
-    extends: [
+module,exports = {
+    "processors": [],
+    "plugins": ['stylelint-order'],
+    "extends": [
         "stylelint-config-standard"
     ],
     ignoreFiles: ['**/*.js', '**/*.jsx', '**/*.tsx', '**/*.ts'],

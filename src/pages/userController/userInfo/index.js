@@ -7,7 +7,7 @@ const columns = [
     title: 'Name',
     dataIndex: 'name',
     key: 'name',
-    render: text => <a>{text}</a>,
+    render: (text) => <a>{text}</a>,
   },
   {
     title: 'Age',
@@ -23,9 +23,9 @@ const columns = [
     title: 'Tags',
     key: 'tags',
     dataIndex: 'tags',
-    render: tags => (
+    render: (tags) => (
       <>
-        {tags.map(tag => {
+        {tags.map((tag) => {
           let color = tag.length > 5 ? 'geekblue' : 'green'
           if (tag === 'loser') {
             color = 'volcano'
@@ -44,7 +44,7 @@ const columns = [
     key: 'action',
     render: (text, record) => (
       <Space size="middle">
-        <a>
+        <a href="#">
           Invite
           {' '}
           {record.name}
@@ -81,18 +81,28 @@ const data = [
 
 export default function UserInfo() {
   const [count, setCount] = useState(0)
+  const [obj, setObj] = useState({ a: { b: { c: 1 } } })
   const clickFunc = () => {
     console.log(1244)
-    setCount(count + 1)
-    post('/user/query').then(res => {
-      console.log(res, '返回数据')
-    })
+    obj.a.b.c = 2
+    setObj(obj)
+    setCount(count + 2)
+    // setCount(count + 1)
+    setTimeout(() => {
+      setCount(count + 1)
+    }, 1000)
+    // eslint-disable-next-line no-shadow
+    // setCount((count) => { console.log(count); return count + 1 })
+    // post('/user/query').then(res => {
+    //   console.log(res, '返回数据')
+    // })
   }
   return (
     <div>
       <input />
       <button type="button" onClick={clickFunc}>点击+1</button>
       <span>{count}</span>
+      <span>{obj.a.b.c}</span>
       <div>
         我是用户信息页面^_^
         <Table columns={columns} dataSource={data} />

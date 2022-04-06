@@ -11,7 +11,7 @@ const instance = axios.create({
 // 文档中的统一设置post请求头。下面会说到post请求的几种'Content-Type'
 instance.defaults.headers.post['Content-Type'] = 'application/json'
 
-let httpCode = {
+const httpCode = {
   400: '请求参数错误',
   401: '权限不足, 请重新登录',
   403: '服务器拒绝本次访问',
@@ -19,11 +19,11 @@ let httpCode = {
   500: '内部服务器错误',
   501: '服务器不支持该请求中使用的方法',
   502: '网关错误',
-  504: '网关超时'
+  504: '网关超时',
 }
 
 /** 添加请求拦截器 * */
-instance.interceptors.request.use(configTemp => {
+instance.interceptors.request.use((configTemp) => {
   const conf = configTemp
   /**
   * api: 后端请求(post) eg: post('/user/login')
@@ -39,27 +39,26 @@ instance.interceptors.request.use(configTemp => {
     conf.headers['Content-Type'] = 'multipart/form-data'
   }
   return conf
-}, error => {
+}, (error) => {
 // 对请求错误做些什么
   Promise.reject(error)
-}
-)
+})
 
 /** 添加响应拦截器  * */
-instance.interceptors.response.use(response => {
+instance.interceptors.response.use((response) => {
   console.log(response)
-  if (response.status === 200) {     // 响应结果里的statusText: ok是我与后台的约定，大家可以根据实际情况去做对应的判断
+  if (response.status === 200) { // 响应结果里的statusText: ok是我与后台的约定，大家可以根据实际情况去做对应的判断
     return Promise.resolve(response.data)
   }
   message.error('响应超时')
   return Promise.reject(response.data.message)
-}, error => {
+}, (error) => {
   console.log(error, '请求错误')
   if (error.response) {
     // 根据请求失败的http状态码去给用户相应的提示
-    let tips = error.response.status in httpCode ? httpCode[error.response.status] : error.response.data.message
+    const tips = error.response.status in httpCode ? httpCode[error.response.status] : error.response.data.message
     message.error(tips)
-    if (error.response.status === 401) {    // token或者登陆失效情况下跳转到登录页面，根据实际情况，在这里可以根据不同的响应错误结果，做对应的事。这里我以401判断为例
+    if (error.response.status === 401) { // token或者登陆失效情况下跳转到登录页面，根据实际情况，在这里可以根据不同的响应错误结果，做对应的事。这里我以401判断为例
       // 针对框架跳转到登陆页面
       this.props.history.push(LOGIN)
     }
@@ -75,10 +74,10 @@ export const get = (url, params, conf = {}) => new Promise((resolve, reject) => 
     method: 'get',
     url,
     params,
-    ...conf
-  }).then(response => {
+    ...conf,
+  }).then((response) => {
     resolve(response)
-  }).catch(error => {
+  }).catch((error) => {
     reject(error)
   })
 })
@@ -90,23 +89,23 @@ export function post(url, data, conf = {}) {
       method: 'post',
       url,
       data,
-      ...conf
-    }).then(response => {
+      ...conf,
+    }).then((response) => {
       resolve(response)
-    }).catch(error => {
+    }).catch((error) => {
       reject(error)
     })
   })
 }
 // 获取所有cookies
 export function getCookies() {
-  let cookie = {}
-  let all = document.cookie
-  let eqIndex,
-    k,
-    v
+  const cookie = {}
+  const all = document.cookie
+  let eqIndex
+  let k
+  let v
   if (!all) return cookie
-  let list = all.split(';')
+  const list = all.split(';')
   // eslint-disable-next-line no-cond-assign
   for (let i = 0, kv; kv = list[i++];) {
     eqIndex = kv.indexOf('=')
@@ -121,7 +120,7 @@ export function getCookies() {
 }
 // 获取指定cookie
 export function getCookie(key, all) {
-  let cookies = getCookies(all)
+  const cookies = getCookies(all)
   return cookies[key] || null
 }
 // 设置指定cookie
@@ -136,11 +135,11 @@ export function setCookie(name, value, days, path, domain, secure) {
   document.cookie = cookie
 }
 // 清除全部cookie
-export function clear() {
-  let rs = document.cookie.match(/([^ ;][^;]*)(?=(=[^;]*)(;|$))/gi)
-  for (let i in rs) {
-    let date = new Date()
-    date.setTime(date.getTime() - 100000)
-    document.cookie = `${rs[i]}=;expires=${date.toGMTString()}; path=/`
-  }
-}
+// export function clear() {
+//   const rs = document.cookie.match(/([^ ;][^;]*)(?=(=[^;]*)(;|$))/gi);
+//   for (const i in rs) {
+//     const date = new Date();
+//     date.setTime(date.getTime() - 100000);
+//     document.cookie = `${rs[i]}=;expires=${date.toGMTString()}; path=/`;
+//   }
+// }

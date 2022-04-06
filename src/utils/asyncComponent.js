@@ -1,6 +1,6 @@
 import React from 'react'
 
-const asyncComponent = loadComponent => (
+const asyncComponent = (loadComponent) => (
   class AsyncComponent extends React.Component {
     state = {
       Component: null,
@@ -12,8 +12,8 @@ const asyncComponent = loadComponent => (
       }
 
       loadComponent()
-        .then(module => module.default)
-        .then(Component => {
+        .then((module) => module.default)
+        .then((Component) => {
           this.setState({ Component })
         })
         .catch((err) => {

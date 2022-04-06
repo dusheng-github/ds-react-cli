@@ -13,7 +13,7 @@ export default class Emitter {
   }
 
   emit(target, ...para) {
-    window.emitCache[this.nameSpace][target].forEach(func => {
+    window.emitCache[this.nameSpace][target].forEach((func) => {
       func.apply(this, para)
     })
   }

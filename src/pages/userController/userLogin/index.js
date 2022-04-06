@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { post, get } from 'utils'
+
 export default function UserLogin() {
   const [count, setCount] = useState(0)
   const clickFunc = () => {
     setCount(count + 1000)
-    post('/user/query').then(res => {
+    post('/user/query').then((res) => {
       console.log(res, '返回数据')
     })
     clickFunc()

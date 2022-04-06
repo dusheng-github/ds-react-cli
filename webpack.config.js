@@ -3,29 +3,30 @@
 // 2. 默认一个chunk下, 包 = (所有相关import + 所有相关index.js)后去重
 // 3.如果chunk之间不想重复打包可以进行splitChunks
 // 4.import()可以产生async包, 等待触发时才会去下载
-const path = require('path')
-const webpack = require('webpack')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
-const TerserPlugin = require('terser-webpack-plugin')
-const ESLintPlugin = require('eslint-webpack-plugin')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-const proxyConfig = require('./config.js')
-const serverPath = process.env.SERVER_PATH
-const server = proxyConfig[serverPath] || proxyConfig[proxyConfig.SERVER || 'DEFAULT']
-const { port = 8080, url: target } = server
-const src = path.resolve(__dirname, 'src')
-const nodeEnv = process.env.NODE_ENV || 'development'
-const isPro = nodeEnv === 'production'
+const path = require('path');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const proxyConfig = require('./config.js');
+
+const serverPath = process.env.SERVER_PATH;
+const server = proxyConfig[serverPath] || proxyConfig[proxyConfig.SERVER || 'DEFAULT'];
+const { port = 8080, url: target } = server;
+const src = path.resolve(__dirname, 'src');
+const nodeEnv = process.env.NODE_ENV || 'development';
+const isPro = nodeEnv === 'production';
 const globals = {
   'process.env.NODE_ENV': JSON.stringify(nodeEnv),
-}
-const filename = isPro ? 'scripts/[name].[chunkhash:8].js' : 'scripts/[name].bundle.js'
+};
+const filename = isPro ? 'scripts/[name].[chunkhash:8].js' : 'scripts/[name].bundle.js';
 module.exports = {
   entry: {
     app: 'index.js',
     vendor: ['lodash', 'react', 'react-dom', 'echarts', 'moment', 'prop-types', 'antd'],
-    common: ['constants/index.js', 'utils/index.js', 'components/index.js', 'server/index.js']
+    common: ['constants/index.js', 'utils/index.js', 'components/index.js', 'server/index.js'],
   },
   output: {
     path: path.resolve(__dirname, 'dist/'),
@@ -60,16 +61,16 @@ module.exports = {
         // },
         router: () => target,
         onProxyReq(proxyReq, req, res) {
-          console.log(`${target}${req.path}`)
-          proxyReq.setHeader('Referer', `${target}${req.path}`)
+          console.log(`${target}${req.path}`);
+          proxyReq.setHeader('Referer', `${target}${req.path}`);
         },
       },
       '/': {
         target: `http://localhost:${port}`,
         pathRewrite: { '^/.*': '/dist/index.html' },
         bypass(req) {
-          if (/.*\..*$/.test(req.path)) return req.path
-        }
+          if (/.*\..*$/.test(req.path)) return req.path;
+        },
       },
     },
   },
@@ -84,7 +85,7 @@ module.exports = {
           'style-loader',
           {
             loader: 'css-loader',
-            options: { modules: true, import: true }
+            options: { modules: true, import: true },
           },
           'postcss-loader',
           {
@@ -95,7 +96,7 @@ module.exports = {
               },
             },
           },
-        ]
+        ],
       },
       {
         test: /\.js$/,
@@ -105,7 +106,7 @@ module.exports = {
             loader: 'babel-loader',
             options: {
               cacheDirectory: true, // 默认缓存在node_modules/.cache/babel-loader
-            }
+            },
           }],
         exclude: /node_modules/,
         include: src,
@@ -113,8 +114,8 @@ module.exports = {
         test: /\.css$/,
         use: ['style-loader', isPro ? {
           loader: 'css-loader',
-          options: { minimize: true }
-        } : 'css-loader']
+          options: { minimize: true },
+        } : 'css-loader'],
       },
       {
         test: /\.(png|jpg|gif)$/i,
@@ -123,10 +124,10 @@ module.exports = {
             loader: 'url-loader',
             options: {
               limit: 8 * 1024,
-            }
+            },
           },
         ],
-        type: 'javascript/auto'
+        type: 'javascript/auto',
       },
     ],
   },
@@ -134,7 +135,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'index.html',
-      publicPath: '/dist/'
+      publicPath: '/dist/',
     }),
     new webpack.IgnorePlugin({
       resourceRegExp: /^\.\/locale$/,
@@ -147,7 +148,7 @@ module.exports = {
     //   ]
     // }),
     new ESLintPlugin(),
-    new BundleAnalyzerPlugin()
+    new BundleAnalyzerPlugin(),
   ],
   optimization: {
     minimize: true,
@@ -158,14 +159,14 @@ module.exports = {
             warnings: false,
             drop_console: true,
             drop_debugger: true,
-            pure_funcs: ['console.log']
-          }
-        }
+            pure_funcs: ['console.log'],
+          },
+        },
       }),
     ],
 
     runtimeChunk: {
-      name: 'manifest'
+      name: 'manifest',
     },
     splitChunks: {
       chunks: 'initial',
@@ -175,14 +176,14 @@ module.exports = {
           name: 'vendor', // 打包后的名字, 没有则按照公共引用的包, 用'~'连接
           test: 'vendor', // 匹配第三方vendor chunk
           enforce: true, // 忽略默认配置
-          priority: 2 // 优先级, 数字越大, 优先级越高, 默认为0
+          priority: 2, // 优先级, 数字越大, 优先级越高, 默认为0
         },
         common: {
           chunks: 'initial',
           name: 'common',
           test: 'common', // 匹配公共common chunk
           enforce: true,
-          priority: 1
+          priority: 1,
         },
         // other: {
         //   chunks: 'initial',
@@ -196,9 +197,9 @@ module.exports = {
           minChunks: 1, // 满足最少引用一次
           test: /[\\/]node_modules[\\/]echarts[\\/]/, // 匹配 /node_modules/echarts/ 单独打包
           name: 'echarts',
-          priority: 3
+          priority: 3,
         },
-      }
+      },
     },
   },
   resolve: {
@@ -210,9 +211,9 @@ module.exports = {
       utils: path.resolve(__dirname, 'src/utils/'),
       server: path.resolve(__dirname, 'src/server/'),
       pages: path.resolve(__dirname, 'src/pages/'),
-    }
+    },
   },
   externals: {
     jquery: 'jQuery', // cdn外链转成正常的npm包的使用方式
-  }
-}
+  },
+};
